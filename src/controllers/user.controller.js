@@ -15,7 +15,6 @@ cloudinary.config({
   api_secret: process.env.API_SECRET,
 });
 
-// get user detail using cookie refresh token
 const getUserDetail = async (req) => {
   const refreshToken = req.cookies.refreshToken || req.body.refreshToken;
   if (!refreshToken) return console.log("no refresh token found!");
@@ -28,7 +27,6 @@ const getUserDetail = async (req) => {
   return user;
 };
 
-// upload image function
 const uploadImageToCloudinary = async (localpath) => {
   try {
     const uploadResult = await cloudinary.uploader.upload(localpath, {
@@ -42,7 +40,6 @@ const uploadImageToCloudinary = async (localpath) => {
   }
 };
 
-// upload image
 const uploadImage = async (req, res) => {
   if (!req.file)
     return res.status(400).json({
@@ -82,7 +79,6 @@ const generateRefreshToken = (user) => {
 };
 
 const getAllUsers = async (req, res) => {
-  // pagination
   const { limit, page } = req.query;
 
   const skip = (page - 1) * limit;
@@ -102,7 +98,6 @@ const registerUser = async (req, res) => {
   if (!password) return res.status(400).json({ message: "password required" });
 
   const user = await User.findOne({ email: email });
-  // check email already used or not
   if (user) return res.status(401).json({ message: "user already exist" });
   try {
     const createUser = await User.create({
